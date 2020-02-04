@@ -9,6 +9,24 @@
     background: currentColor ;
 }
 
+.input-border{
+    border: thin solid #000 !important;
+    border-radius: 10px;
+    padding: 20px;
+    margin : auto 200px auto 200px;
+    background: #09090933;
+    box-shadow: 5px 5px rgb(0, 0, 0);
+}
+
+.input-border-list{
+    border: thin solid #000 !important;
+    border-radius: 10px;
+    padding: 20px;
+    margin : 50px 200px auto 200px;
+    background: rgb(63, 57, 57);
+    box-shadow: 5px 5px rgb(0, 0, 0);
+}
+
 .display-4{
     font-size: 3rem;
     font-weight: 300;
@@ -30,7 +48,7 @@ body {
     background: #fff;
     padding: 0 120px 0 0;
     border-radius: 1px;
-    margin-top: 200px;
+    margin-top: 50px;
     box-shadow: 0px 0px 0px 6px rgba(255, 255, 255, 0.3)
 }
 
@@ -108,7 +126,7 @@ body {
 
 .main-todo-input-wrap {
     max-width: 500px;
-    margin: 20px auto;
+    margin: 10px auto;
     position: relative
 }
 
@@ -173,5 +191,5 @@ ul {
 
 .todo-listing {
     padding: 0px 29px 0 0;
-    margin-top: 54px !important
+    margin-top: 24px !important
 }

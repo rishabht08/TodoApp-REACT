@@ -1,7 +1,7 @@
 const Title = () => {
     return (
-        <div className = "border">
-        <h1 className="display-4 font-italic centred">Todo App</h1>
+        <div className="border">
+            <h1 className="display-4 font-italic centred">Todo App</h1>
         </div>
     )
 }
@@ -45,6 +45,7 @@ class Input extends React.Component {
     }
     render() {
         return (
+
             <div className="row">
                 <div className="col-md-12">
                     <div className="main-todo-input-wrap">
@@ -57,6 +58,7 @@ class Input extends React.Component {
                     </div>
                 </div>
             </div>
+
         )
     }
 }
@@ -128,9 +130,12 @@ class Wrapper extends React.Component {
         return (
             <div>
                 <Title /><br></br>
-                <Input setTodofromInput={(todo) => this.updateWrapperState(todo)} currentState={this.state} /><br></br>
-                <Todolist todoData={this.state.todos} deleteTodo={(index) => this.deleteTodoFromState(index)}
-                    editTodo={(index) => this.editTodoList(index)} />
+                <div className="input-border">
+                    <Input setTodofromInput={(todo) => this.updateWrapperState(todo)} currentState={this.state} /><br></br></div>
+                <div className="input-border-list">
+                    <Todolist todoData={this.state.todos} deleteTodo={(index) => this.deleteTodoFromState(index)}
+                        editTodo={(index) => this.editTodoList(index)} />
+                </div>
             </div>
         )
     }
