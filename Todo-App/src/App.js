@@ -1,152 +1,100 @@
-import React from 'react';
+import React, { Component } from 'react';
 import './App.css';
+import Input from "./components/Inputs";
+import TodoList from "./components/TodoList";
+import Select from "./components/Select";
 
-const Title = () => {
-  return (
-    <div className="border">
-      <h1 className="display-4 font-italic centred">Todo App</h1>
-    </div>
-  )
-}
-
-//Input Compponent
-class Input extends React.Component {
+class App extends Component {
   state = {
-    title: "",
-    deadline: "",
-    isCompleted: false
-  }
-
-  onInputChange = (event) => {
-    this.setState({
-      title: event.target.value
-    })
-  }
-
-  onDateChange = (event) => {
-    this.setState({
-      deadline: event.target.value
-    })
-
-  }
-  sendsateToWrapper() {
-    this.props.setTodofromInput(this.state)
-    this.setState({
-      title: "",
-      deadline: ""
-    })
-  }
-
-  //Lifecycle method(REACT Inbuilt)
-  componentDidUpdate(prevProp, prevState) {
-    if (prevProp.currentState.editData != this.props.currentState.editData) {
-      this.setState({
-        title: this.props.currentState.editData.title,
-        deadline: this.props.currentState.editData.deadline
-      })
-    }
-  }
-  render() {
-    return (
-
-      <div className="row">
-        <div className="col-md-12">
-          <div className="main-todo-input-wrap">
-            <div className="main-todo-input fl-wrap">
-              <div className="main-todo-input-item"> <input type="text" id="todo-list-item" onChange={(event) => this.onInputChange(event)}
-                value={this.state.title} placeholder="What will you do today?"></input> </div>
-              {!this.props.currentState.isEdit && <button onClick={() => this.sendsateToWrapper()} className="add-items main-search-button">ADD</button>}
-              {this.props.currentState.isEdit && <button onClick={() => this.sendsateToWrapper()} className="add-items main-search-button edit">Edit</button>}
-            </div>
-          </div>
-        </div>
-      </div>
-
-    )
-  }
-}
-
-//TodoList Component
-class Todolist extends React.Component {
-  render() {
-    return (
-
-      <div className="row">
-        <div className="col-md-12">
-          <div className="main-todo-input-wrap">
-            {this.props.todoData.map((item, index) =>
-              <div className="main-todo-input fl-wrap todo-listing">
-                <ul id="list-items">{item.title}</ul>
-                <button onClick={() => this.props.editTodo(index)} className="add-items main-search-button-edit"  >Edit</button>
-                <button onClick={() => this.props.deleteTodo(index)} className="add-items main-search-button-delete">Delete</button>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-    )
-  }
-}
-
-//Wrapper Component(Wrapping todoList and Input fields)
-class Wrapper extends React.Component {
-  state = {
-    todos: [],
+    todoList: [],
+    defaultType: "All",
     isEdit: false,
-    editIndex: "",
-    editData: ""
+    editData: "",
+    editIndex: ""
   }
-  updateWrapperState(todo) {
-    let todoList = this.state.todos.slice();
-    todoList[this.state.editIndex] = todo;
-    if (!this.state.isEdit) {
-      this.setState({
-        todos: [...this.state.todos, todo]
-      })
+  addTodoToState(todo) {
+    let todoList = this.state.todoList.slice();
+
+    if (this.state.isEdit) {
+      todoList[this.state.editIndex] = todo;
     }
     else {
-      this.setState({
-        todos: todoList,
-        isEdit: false
-      })
+      todoList.push(todo);
+    }
+    this.setState({
+      todoList: todoList,
+      isEdit: false
+    })
+  }
+  checkBoxStatus(check, index) {
+    let todoList = this.state.todoList.slice();
+    todoList[index].completed = check;
+    this.setState({
+      todoList: todoList
+    })
+  }
+  changeType(type) {
+    this.setState({
+      defaultType: type
+    })
+  }
+  loadingListType() {
+    if (this.state.defaultType == "All") {
+      let list = []
+      for (let i = 0; i < this.state.todoList.length; i++) {
+        list.push([this.state.todoList[i], i])
+      }
+      return list;
+    }
+    if (this.state.defaultType == "Completed") {
+      let list = []
+      for (let i = 0; i < this.state.todoList.length; i++) {
+        if (this.state.todoList[i].completed == true) {
+          list.push([this.state.todoList[i], i])
+        }
+      }
+      return list;
+    }
+    if (this.state.defaultType == "Not Completed") {
+      let list = []
+      for (let i = 0; i < this.state.todoList.length; i++) {
+        if (this.state.todoList[i].completed == false) {
+          list.push([this.state.todoList[i], i])
+        }
+      }
+      return list;
     }
   }
 
-  deleteTodoFromState(index) {
-    let todoList = this.state.todos.slice();
-    todoList.splice(index, 1);
+  deleteTodo(index) {
+    let todoList = this.state.todoList.slice();
+    todoList.splice(index, 1)
     this.setState({
-      todos: todoList
+      todoList: todoList
     })
   }
-
-  editTodoList(index) {
+  changeToEdit(dataIndex) {
     this.setState({
       isEdit: true,
-      editIndex: index,
-      editData: this.state.todos[index]
+      editData: this.state.todoList[dataIndex],
+      editIndex: dataIndex
     })
-
   }
-
   render() {
     return (
-      <div>
-        <Title /><br></br>
-
-        <Input setTodofromInput={(todo) => this.updateWrapperState(todo)} currentState={this.state} /><br></br>
-
-        <Todolist todoData={this.state.todos} deleteTodo={(index) => this.deleteTodoFromState(index)}
-          editTodo={(index) => this.editTodoList(index)} />
+      <div className="main">
+        <div className="header">
+          <h3>TODO APP</h3>
+        </div>
+        <Input addTodoToApp={(todo) => { this.addTodoToState(todo) }} toEditdata={[this.state.editData, this.state.isEdit]} />
+        <Select todoType={(type) => this.changeType(type)} />
+        <TodoList loadTodo={this.loadingListType()} onChecked={(check, index) => this.checkBoxStatus(check, index)}
+          deleteTodo={(index) => this.deleteTodo(index)} changeToEdit={(dataIndex) => this.changeToEdit(dataIndex)} />
       </div>
-
     )
   }
 }
 
-function App() {
-  return (<Wrapper />)
-}
 
 
 export default App;
